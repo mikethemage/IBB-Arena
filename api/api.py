@@ -14,6 +14,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("shutdown")
+def shutdown_event():
+    GPIO.cleanup()
+
 @app.get('/')
 async def root():
     return {'message': 'What you doing'}
