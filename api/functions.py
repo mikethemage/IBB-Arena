@@ -1,7 +1,15 @@
-from time import sleep      # get a time source 
-import RPi.GPIO as GPIO     # import GPIO
-import sys                  # import sys 
+import platform
 import logging              # import loggng for output logging 
+import sys                  # import sys 
+from time import sleep      # get a time source 
+
+def is_raspberry_pi():
+    return "raspberrypi" in platform.uname().node.lower()
+
+if(is_raspberry_pi()):
+    import RPi.GPIO as GPIO         # import GPIO
+else:
+    import RPiMock.GPIO as GPIO     # import mock GPIO for testing
 
 logging.basicConfig(filename='arenaapi.log', encoding='utf-8', level=logging.DEBUG, format='%(asctime)s %(levelname)-2s %(message)s',  datefmt='%Y-%m-%d %H:%M:%S')
 GPIO.setmode(GPIO.BOARD)
@@ -18,7 +26,6 @@ p.start(0)                  # Starts running PWM on the pin and sets it to 0
 GPIO.setup(19, GPIO.OUT)    # LED mid pin
 GPIO.setup(21, GPIO.OUT)    # LED start pin
 GPIO.setup(23, GPIO.OUT)    # LED end pin
-
 
 active_flag = 'active_flag.txt' # File where weapon active flag is stored, 1=weapons active 0=weapons inactive, this is also used to break the match loop
 
@@ -137,8 +144,7 @@ def flagcheck():
             logging.info("match end flag is set ending loop")
             sys.exit()
         elif content == '1':
-            return
-        
+            return        
 
 def matchtimer120():
     logging.info('match started')

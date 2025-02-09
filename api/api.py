@@ -1,8 +1,16 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from functions import *
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print('Is Raspberry Pi?: ', is_raspberry_pi())  # True if running on Raspberry Pi
+    yield
+    # Clean up the GPIO module and release the resources
+    GPIO.cleanup()
+
+app = FastAPI(lifespan=lifespan)
 
 origins = ["*"]
 
@@ -13,10 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("shutdown")
-def shutdown_event():
-    GPIO.cleanup()
 
 @app.get('/')
 async def root():
