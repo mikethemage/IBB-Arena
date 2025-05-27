@@ -9,7 +9,7 @@ def is_raspberry_pi():
 if(is_raspberry_pi()):
     import RPi.GPIO as GPIO         # import GPIO
 else:
-    import RPiMock.GPIO as GPIO     # import mock GPIO for testing
+    import api.RPiMock.GPIO as GPIO     # import mock GPIO for testing
 
 logging.basicConfig(filename='arenaapi.log', encoding='utf-8', level=logging.DEBUG, format='%(asctime)s %(levelname)-2s %(message)s',  datefmt='%Y-%m-%d %H:%M:%S')
 GPIO.setmode(GPIO.BOARD)

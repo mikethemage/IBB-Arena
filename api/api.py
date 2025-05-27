@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from functions import *
+from api.functions import *
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
